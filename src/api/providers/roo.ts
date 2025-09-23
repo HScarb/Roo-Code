@@ -8,6 +8,7 @@ import { ApiStream } from "../transform/stream"
 
 import type { ApiHandlerCreateMessageMetadata } from "../index"
 import { BaseOpenAiCompatibleProvider } from "./base-openai-compatible-provider"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 export class RooHandler extends BaseOpenAiCompatibleProvider<RooModelId> {
 	constructor(options: ApiHandlerOptions) {
@@ -30,6 +31,10 @@ export class RooHandler extends BaseOpenAiCompatibleProvider<RooModelId> {
 			providerModels: rooModels,
 			defaultTemperature: 0.7,
 		})
+	}
+
+	protected getCustomModelInfo() {
+		return this.options.rooCustomModelInfo
 	}
 
 	override async *createMessage(
@@ -75,23 +80,30 @@ export class RooHandler extends BaseOpenAiCompatibleProvider<RooModelId> {
 
 	override getModel() {
 		const modelId = this.options.apiModelId || rooDefaultModelId
-		const modelInfo = this.providerModels[modelId as RooModelId] ?? this.providerModels[rooDefaultModelId]
+		const defaultModelInfo = this.providerModels[modelId as RooModelId] ?? this.providerModels[rooDefaultModelId]
 
-		if (modelInfo) {
-			return { id: modelId as RooModelId, info: modelInfo }
+		if (defaultModelInfo) {
+			const customInfo = this.getCustomModelInfo()
+			const info = mergeModelInfo(defaultModelInfo, customInfo)
+			return { id: modelId as RooModelId, info }
 		}
 
 		// Return the requested model ID even if not found, with fallback info.
+		const fallbackInfo = {
+			maxTokens: 16_384,
+			contextWindow: 262_144,
+			supportsImages: false,
+			supportsPromptCache: true,
+			inputPrice: 0,
+			outputPrice: 0,
+		}
+
+		const customInfo = this.getCustomModelInfo()
+		const info = mergeModelInfo(fallbackInfo, customInfo)
+
 		return {
 			id: modelId as RooModelId,
-			info: {
-				maxTokens: 16_384,
-				contextWindow: 262_144,
-				supportsImages: false,
-				supportsPromptCache: true,
-				inputPrice: 0,
-				outputPrice: 0,
-			},
+			info,
 		}
 	}
 }

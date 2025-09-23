@@ -23,6 +23,10 @@ export class ChutesHandler extends BaseOpenAiCompatibleProvider<ChutesModelId> {
 		})
 	}
 
+	protected getCustomModelInfo() {
+		return this.options.chutesCustomModelInfo
+	}
+
 	private getCompletionParams(
 		systemPrompt: string,
 		messages: Anthropic.Messages.MessageParam[],

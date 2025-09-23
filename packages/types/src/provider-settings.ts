@@ -193,6 +193,7 @@ const anthropicSchema = apiModelIdProviderModelSchema.extend({
 	anthropicBaseUrl: z.string().optional(),
 	anthropicUseAuthToken: z.boolean().optional(),
 	anthropicBeta1MContext: z.boolean().optional(), // Enable 'context-1m-2025-08-07' beta for 1M context window.
+	anthropicCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const claudeCodeSchema = apiModelIdProviderModelSchema.extend({
@@ -238,6 +239,7 @@ const vertexSchema = apiModelIdProviderModelSchema.extend({
 	vertexRegion: z.string().optional(),
 	enableUrlContext: z.boolean().optional(),
 	enableGrounding: z.boolean().optional(),
+	vertexCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const openAiSchema = baseProviderSettingsSchema.extend({
@@ -246,7 +248,7 @@ const openAiSchema = baseProviderSettingsSchema.extend({
 	openAiLegacyFormat: z.boolean().optional(),
 	openAiR1FormatEnabled: z.boolean().optional(),
 	openAiModelId: z.string().optional(),
-	openAiCustomModelInfo: modelInfoSchema.nullish(),
+	openAiCustomModelInfo: modelInfoSchema.partial().nullish(),
 	openAiUseAzure: z.boolean().optional(),
 	azureApiVersion: z.string().optional(),
 	openAiStreamingEnabled: z.boolean().optional(),
@@ -283,6 +285,7 @@ const geminiSchema = apiModelIdProviderModelSchema.extend({
 	googleGeminiBaseUrl: z.string().optional(),
 	enableUrlContext: z.boolean().optional(),
 	enableGrounding: z.boolean().optional(),
+	geminiCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const geminiCliSchema = apiModelIdProviderModelSchema.extend({
@@ -301,6 +304,7 @@ const openAiNativeSchema = apiModelIdProviderModelSchema.extend({
 const mistralSchema = apiModelIdProviderModelSchema.extend({
 	mistralApiKey: z.string().optional(),
 	mistralCodestralUrl: z.string().optional(),
+	mistralCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const deepSeekSchema = apiModelIdProviderModelSchema.extend({
@@ -345,10 +349,12 @@ const fakeAiSchema = baseProviderSettingsSchema.extend({
 
 const xaiSchema = apiModelIdProviderModelSchema.extend({
 	xaiApiKey: z.string().optional(),
+	xaiCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const groqSchema = apiModelIdProviderModelSchema.extend({
 	groqApiKey: z.string().optional(),
+	groqCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const huggingFaceSchema = baseProviderSettingsSchema.extend({
@@ -359,6 +365,7 @@ const huggingFaceSchema = baseProviderSettingsSchema.extend({
 
 const chutesSchema = apiModelIdProviderModelSchema.extend({
 	chutesApiKey: z.string().optional(),
+	chutesCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const litellmSchema = baseProviderSettingsSchema.extend({
@@ -370,10 +377,12 @@ const litellmSchema = baseProviderSettingsSchema.extend({
 
 const cerebrasSchema = apiModelIdProviderModelSchema.extend({
 	cerebrasApiKey: z.string().optional(),
+	cerebrasCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const sambaNovaSchema = apiModelIdProviderModelSchema.extend({
 	sambaNovaApiKey: z.string().optional(),
+	sambaNovaCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 export const zaiApiLineSchema = z.enum(["international_coding", "international", "china_coding", "china"])
@@ -383,19 +392,23 @@ export type ZaiApiLine = z.infer<typeof zaiApiLineSchema>
 const zaiSchema = apiModelIdProviderModelSchema.extend({
 	zaiApiKey: z.string().optional(),
 	zaiApiLine: zaiApiLineSchema.optional(),
+	zaiCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const fireworksSchema = apiModelIdProviderModelSchema.extend({
 	fireworksApiKey: z.string().optional(),
+	fireworksCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const featherlessSchema = apiModelIdProviderModelSchema.extend({
 	featherlessApiKey: z.string().optional(),
+	featherlessCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const ioIntelligenceSchema = apiModelIdProviderModelSchema.extend({
 	ioIntelligenceModelId: z.string().optional(),
 	ioIntelligenceApiKey: z.string().optional(),
+	ioIntelligenceCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const qwenCodeSchema = apiModelIdProviderModelSchema.extend({
@@ -404,6 +417,7 @@ const qwenCodeSchema = apiModelIdProviderModelSchema.extend({
 
 const rooSchema = apiModelIdProviderModelSchema.extend({
 	// No additional fields needed - uses cloud authentication.
+	rooCustomModelInfo: modelInfoSchema.partial().nullish(),
 })
 
 const vercelAiGatewaySchema = baseProviderSettingsSchema.extend({

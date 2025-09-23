@@ -12,6 +12,7 @@ import type { ApiHandlerCreateMessageMetadata, SingleCompletionHandler } from ".
 import { BaseProvider } from "./base-provider"
 import { DEFAULT_HEADERS } from "./constants"
 import { t } from "../../i18n"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 const CEREBRAS_BASE_URL = "https://api.cerebras.ai/v1"
 const CEREBRAS_DEFAULT_TEMPERATURE = 0
@@ -108,9 +109,15 @@ export class CerebrasHandler extends BaseProvider implements SingleCompletionHan
 			apiModelId = "qwen-3-coder-480b"
 		}
 
+		const defaultInfo = this.providerModels[originalModelId] // Use original model info for rate limits/descriptions
+
+		// Merge with custom model info from settings
+		const customInfo = this.options.cerebrasCustomModelInfo
+		const info = mergeModelInfo(defaultInfo, customInfo)
+
 		return {
 			id: apiModelId,
-			info: this.providerModels[originalModelId], // Use original model info for rate limits/descriptions
+			info,
 		}
 	}
 

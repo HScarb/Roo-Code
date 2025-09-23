@@ -6,8 +6,10 @@ import type { ProviderSettings } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
+import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
 
 import { inputEventTransform } from "../transforms"
+import { ModelCapabilitySettings } from "../ModelCapabilitySettings"
 
 type GeminiProps = {
 	apiConfiguration: ProviderSettings
@@ -17,6 +19,7 @@ type GeminiProps = {
 
 export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcomeView }: GeminiProps) => {
 	const { t } = useAppTranslation()
+	const selectedModel = useSelectedModel(apiConfiguration)
 
 	const [googleGeminiBaseUrlSelected, setGoogleGeminiBaseUrlSelected] = useState(
 		!!apiConfiguration?.googleGeminiBaseUrl,
@@ -99,6 +102,12 @@ export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcome
 					</>
 				)}
 			</div>
+			<ModelCapabilitySettings
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				modelInfoKey="geminiCustomModelInfo"
+				defaultModelInfo={selectedModel.info}
+			/>
 		</>
 	)
 }

@@ -16,12 +16,14 @@ import { ExtensionMessage } from "@roo/ExtensionMessage"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Button, StandardTooltip } from "@src/components/ui"
+import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
 
 import { convertHeadersToObject } from "../utils/headers"
 import { inputEventTransform, noTransform } from "../transforms"
 import { ModelPicker } from "../ModelPicker"
 import { R1FormatSetting } from "../R1FormatSetting"
 import { ThinkingBudget } from "../ThinkingBudget"
+import { ModelCapabilitySettings } from "../ModelCapabilitySettings"
 
 type OpenAICompatibleProps = {
 	apiConfiguration: ProviderSettings
@@ -37,6 +39,7 @@ export const OpenAICompatible = ({
 	modelValidationError,
 }: OpenAICompatibleProps) => {
 	const { t } = useAppTranslation()
+	const selectedModel = useSelectedModel(apiConfiguration)
 
 	const [azureApiVersionSelected, setAzureApiVersionSelected] = useState(!!apiConfiguration?.azureApiVersion)
 	const [openAiLegacyFormatSelected, setOpenAiLegacyFormatSelected] = useState(!!apiConfiguration?.openAiLegacyFormat)
@@ -282,88 +285,13 @@ export const OpenAICompatible = ({
 					/>
 				)}
 			</div>
+			<ModelCapabilitySettings
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				modelInfoKey="openAiCustomModelInfo"
+				defaultModelInfo={selectedModel.info || openAiModelInfoSaneDefaults}
+			/>
 			<div className="flex flex-col gap-3">
-				<div className="text-sm text-vscode-descriptionForeground whitespace-pre-line">
-					{t("settings:providers.customModel.capabilities")}
-				</div>
-
-				<div>
-					<VSCodeTextField
-						value={
-							apiConfiguration?.openAiCustomModelInfo?.maxTokens?.toString() ||
-							openAiModelInfoSaneDefaults.maxTokens?.toString() ||
-							""
-						}
-						type="text"
-						style={{
-							borderColor: (() => {
-								const value = apiConfiguration?.openAiCustomModelInfo?.maxTokens
-
-								if (!value) {
-									return "var(--vscode-input-border)"
-								}
-
-								return value > 0 ? "var(--vscode-charts-green)" : "var(--vscode-errorForeground)"
-							})(),
-						}}
-						onInput={handleInputChange("openAiCustomModelInfo", (e) => {
-							const value = parseInt((e.target as HTMLInputElement).value)
-
-							return {
-								...(apiConfiguration?.openAiCustomModelInfo || openAiModelInfoSaneDefaults),
-								maxTokens: isNaN(value) ? undefined : value,
-							}
-						})}
-						placeholder={t("settings:placeholders.numbers.maxTokens")}
-						className="w-full">
-						<label className="block font-medium mb-1">
-							{t("settings:providers.customModel.maxTokens.label")}
-						</label>
-					</VSCodeTextField>
-					<div className="text-sm text-vscode-descriptionForeground">
-						{t("settings:providers.customModel.maxTokens.description")}
-					</div>
-				</div>
-
-				<div>
-					<VSCodeTextField
-						value={
-							apiConfiguration?.openAiCustomModelInfo?.contextWindow?.toString() ||
-							openAiModelInfoSaneDefaults.contextWindow?.toString() ||
-							""
-						}
-						type="text"
-						style={{
-							borderColor: (() => {
-								const value = apiConfiguration?.openAiCustomModelInfo?.contextWindow
-
-								if (!value) {
-									return "var(--vscode-input-border)"
-								}
-
-								return value > 0 ? "var(--vscode-charts-green)" : "var(--vscode-errorForeground)"
-							})(),
-						}}
-						onInput={handleInputChange("openAiCustomModelInfo", (e) => {
-							const value = (e.target as HTMLInputElement).value
-							const parsed = parseInt(value)
-
-							return {
-								...(apiConfiguration?.openAiCustomModelInfo || openAiModelInfoSaneDefaults),
-								contextWindow: isNaN(parsed) ? openAiModelInfoSaneDefaults.contextWindow : parsed,
-							}
-						})}
-						placeholder={t("settings:placeholders.numbers.contextWindow")}
-						className="w-full">
-						<label className="block font-medium mb-1">
-							{t("settings:providers.customModel.contextWindow.label")}
-						</label>
-					</VSCodeTextField>
-					<div className="text-sm text-vscode-descriptionForeground">
-						{t("settings:providers.customModel.contextWindow.description")}
-					</div>
-				</div>
-
 				<div>
 					<div className="flex items-center gap-1">
 						<Checkbox

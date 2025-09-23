@@ -5,8 +5,10 @@ import type { ProviderSettings } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
+import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
 
 import { inputEventTransform } from "../transforms"
+import { ModelCapabilitySettings } from "../ModelCapabilitySettings"
 
 type FireworksProps = {
 	apiConfiguration: ProviderSettings
@@ -15,6 +17,7 @@ type FireworksProps = {
 
 export const Fireworks = ({ apiConfiguration, setApiConfigurationField }: FireworksProps) => {
 	const { t } = useAppTranslation()
+	const selectedModel = useSelectedModel(apiConfiguration)
 
 	const handleInputChange = useCallback(
 		<K extends keyof ProviderSettings, E>(
@@ -45,6 +48,12 @@ export const Fireworks = ({ apiConfiguration, setApiConfigurationField }: Firewo
 					{t("settings:providers.getFireworksApiKey")}
 				</VSCodeButtonLink>
 			)}
+			<ModelCapabilitySettings
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				modelInfoKey="fireworksCustomModelInfo"
+				defaultModelInfo={selectedModel.info}
+			/>
 		</>
 	)
 }

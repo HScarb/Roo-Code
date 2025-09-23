@@ -9,6 +9,7 @@ import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
 
 import { inputEventTransform, noTransform } from "../transforms"
+import { ModelCapabilitySettings } from "../ModelCapabilitySettings"
 
 type AnthropicProps = {
 	apiConfiguration: ProviderSettings
@@ -98,6 +99,12 @@ export const Anthropic = ({ apiConfiguration, setApiConfigurationField }: Anthro
 					</div>
 				</div>
 			)}
+			<ModelCapabilitySettings
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				modelInfoKey="anthropicCustomModelInfo"
+				defaultModelInfo={selectedModel.info}
+			/>
 		</>
 	)
 }

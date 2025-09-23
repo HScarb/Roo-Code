@@ -29,4 +29,8 @@ export class ZAiHandler extends BaseOpenAiCompatibleProvider<InternationalZAiMod
 			defaultTemperature: ZAI_DEFAULT_TEMPERATURE,
 		})
 	}
+
+	protected getCustomModelInfo() {
+		return this.options.zaiCustomModelInfo
+	}
 }

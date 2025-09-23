@@ -2,6 +2,7 @@ import { ioIntelligenceDefaultModelId, ioIntelligenceModels, type IOIntelligence
 
 import type { ApiHandlerOptions } from "../../shared/api"
 import { BaseOpenAiCompatibleProvider } from "./base-openai-compatible-provider"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 export class IOIntelligenceHandler extends BaseOpenAiCompatibleProvider<IOIntelligenceModelId> {
 	constructor(options: ApiHandlerOptions) {
@@ -20,25 +21,36 @@ export class IOIntelligenceHandler extends BaseOpenAiCompatibleProvider<IOIntell
 		})
 	}
 
+	protected getCustomModelInfo() {
+		return this.options.ioIntelligenceCustomModelInfo
+	}
+
 	override getModel() {
 		const modelId = this.options.ioIntelligenceModelId || (ioIntelligenceDefaultModelId as IOIntelligenceModelId)
 
-		const modelInfo =
+		const defaultModelInfo =
 			this.providerModels[modelId as IOIntelligenceModelId] ?? this.providerModels[ioIntelligenceDefaultModelId]
 
-		if (modelInfo) {
-			return { id: modelId as IOIntelligenceModelId, info: modelInfo }
+		if (defaultModelInfo) {
+			const customInfo = this.getCustomModelInfo()
+			const info = mergeModelInfo(defaultModelInfo, customInfo)
+			return { id: modelId as IOIntelligenceModelId, info }
 		}
 
 		// Return the requested model ID even if not found, with fallback info.
+		const fallbackInfo = {
+			maxTokens: 8192,
+			contextWindow: 128000,
+			supportsImages: false,
+			supportsPromptCache: false,
+		}
+
+		const customInfo = this.getCustomModelInfo()
+		const info = mergeModelInfo(fallbackInfo, customInfo)
+
 		return {
 			id: modelId as IOIntelligenceModelId,
-			info: {
-				maxTokens: 8192,
-				contextWindow: 128000,
-				supportsImages: false,
-				supportsPromptCache: false,
-			},
+			info,
 		}
 	}
 }

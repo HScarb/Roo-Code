@@ -5,8 +5,10 @@ import type { ProviderSettings } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
+import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
 
 import { inputEventTransform } from "../transforms"
+import { ModelCapabilitySettings } from "../ModelCapabilitySettings"
 
 type SambaNovaProps = {
 	apiConfiguration: ProviderSettings
@@ -15,6 +17,7 @@ type SambaNovaProps = {
 
 export const SambaNova = ({ apiConfiguration, setApiConfigurationField }: SambaNovaProps) => {
 	const { t } = useAppTranslation()
+	const selectedModel = useSelectedModel(apiConfiguration)
 
 	const handleInputChange = useCallback(
 		<K extends keyof ProviderSettings, E>(
@@ -47,6 +50,12 @@ export const SambaNova = ({ apiConfiguration, setApiConfigurationField }: SambaN
 					{t("settings:providers.getSambaNovaApiKey")}
 				</VSCodeButtonLink>
 			)}
+			<ModelCapabilitySettings
+				apiConfiguration={apiConfiguration}
+				setApiConfigurationField={setApiConfigurationField}
+				modelInfoKey="sambaNovaCustomModelInfo"
+				defaultModelInfo={selectedModel.info}
+			/>
 		</>
 	)
 }

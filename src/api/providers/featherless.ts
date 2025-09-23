@@ -1,4 +1,9 @@
-import { DEEP_SEEK_DEFAULT_TEMPERATURE, type FeatherlessModelId, featherlessDefaultModelId, featherlessModels } from "@roo-code/types"
+import {
+	DEEP_SEEK_DEFAULT_TEMPERATURE,
+	type FeatherlessModelId,
+	featherlessDefaultModelId,
+	featherlessModels,
+} from "@roo-code/types"
 import { Anthropic } from "@anthropic-ai/sdk"
 import OpenAI from "openai"
 
@@ -21,6 +26,10 @@ export class FeatherlessHandler extends BaseOpenAiCompatibleProvider<Featherless
 			providerModels: featherlessModels,
 			defaultTemperature: 0.5,
 		})
+	}
+
+	protected getCustomModelInfo() {
+		return this.options.featherlessCustomModelInfo
 	}
 
 	private getCompletionParams(

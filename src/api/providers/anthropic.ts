@@ -18,6 +18,7 @@ import { getModelParams } from "../transform/model-params"
 import { BaseProvider } from "./base-provider"
 import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from "../index"
 import { calculateApiCostAnthropic } from "../../shared/cost"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 export class AnthropicHandler extends BaseProvider implements SingleCompletionHandler {
 	private options: ApiHandlerOptions
@@ -241,15 +242,15 @@ export class AnthropicHandler extends BaseProvider implements SingleCompletionHa
 	getModel() {
 		const modelId = this.options.apiModelId
 		let id = modelId && modelId in anthropicModels ? (modelId as AnthropicModelId) : anthropicDefaultModelId
-		let info: ModelInfo = anthropicModels[id]
+		let defaultInfo: ModelInfo = anthropicModels[id]
 
 		// If 1M context beta is enabled for Claude Sonnet 4, update the model info
 		if (id === "claude-sonnet-4-20250514" && this.options.anthropicBeta1MContext) {
 			// Use the tier pricing for 1M context
-			const tier = info.tiers?.[0]
+			const tier = defaultInfo.tiers?.[0]
 			if (tier) {
-				info = {
-					...info,
+				defaultInfo = {
+					...defaultInfo,
 					contextWindow: tier.contextWindow,
 					inputPrice: tier.inputPrice,
 					outputPrice: tier.outputPrice,
@@ -258,6 +259,10 @@ export class AnthropicHandler extends BaseProvider implements SingleCompletionHa
 				}
 			}
 		}
+
+		// Merge with custom model info from settings
+		const customInfo = this.options.anthropicCustomModelInfo
+		const info = mergeModelInfo(defaultInfo, customInfo)
 
 		const params = getModelParams({
 			format: "anthropic",

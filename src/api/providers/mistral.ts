@@ -10,6 +10,7 @@ import { ApiStream } from "../transform/stream"
 
 import { BaseProvider } from "./base-provider"
 import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from "../index"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 // Type helper to handle thinking chunks from Mistral API
 // The SDK includes ThinkChunk but TypeScript has trouble with the discriminated union
@@ -95,7 +96,11 @@ export class MistralHandler extends BaseProvider implements SingleCompletionHand
 
 	override getModel() {
 		const id = this.options.apiModelId ?? mistralDefaultModelId
-		const info = mistralModels[id as MistralModelId] ?? mistralModels[mistralDefaultModelId]
+		const defaultInfo = mistralModels[id as MistralModelId] ?? mistralModels[mistralDefaultModelId]
+
+		// Merge with custom model info from settings
+		const customInfo = this.options.mistralCustomModelInfo
+		const info = mergeModelInfo(defaultInfo, customInfo)
 
 		// @TODO: Move this to the `getModelParams` function.
 		const maxTokens = this.options.includeMaxTokens ? info.maxTokens : undefined

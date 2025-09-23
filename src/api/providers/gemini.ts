@@ -20,6 +20,7 @@ import { getModelParams } from "../transform/model-params"
 
 import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from "../index"
 import { BaseProvider } from "./base-provider"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 type GeminiHandlerOptions = ApiHandlerOptions & {
 	isVertex?: boolean
@@ -165,7 +166,12 @@ export class GeminiHandler extends BaseProvider implements SingleCompletionHandl
 	override getModel() {
 		const modelId = this.options.apiModelId
 		let id = modelId && modelId in geminiModels ? (modelId as GeminiModelId) : geminiDefaultModelId
-		let info: ModelInfo = geminiModels[id]
+		let defaultInfo: ModelInfo = geminiModels[id]
+
+		// Merge with custom model info from settings
+		const customInfo = this.options.geminiCustomModelInfo
+		const info = mergeModelInfo(defaultInfo, customInfo)
+
 		const params = getModelParams({ format: "gemini", modelId: id, model: info, settings: this.options })
 
 		// The `:thinking` suffix indicates that the model is a "Hybrid"

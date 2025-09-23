@@ -11,6 +11,7 @@ import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from ".
 import { DEFAULT_HEADERS } from "./constants"
 import { BaseProvider } from "./base-provider"
 import { handleOpenAIError } from "./utils/openai-error-handler"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 type BaseOpenAiCompatibleProviderOptions<ModelName extends string> = ApiHandlerOptions & {
 	providerName: string
@@ -24,6 +25,11 @@ export abstract class BaseOpenAiCompatibleProvider<ModelName extends string>
 	extends BaseProvider
 	implements SingleCompletionHandler
 {
+	/**
+	 * Abstract method to get custom model info from settings.
+	 * Each provider implementation should return their specific customModelInfo field.
+	 */
+	protected abstract getCustomModelInfo(): Partial<ModelInfo> | null | undefined
 	protected readonly providerName: string
 	protected readonly baseURL: string
 	protected readonly defaultTemperature: number
@@ -140,6 +146,10 @@ export abstract class BaseOpenAiCompatibleProvider<ModelName extends string>
 				? (this.options.apiModelId as ModelName)
 				: this.defaultProviderModelId
 
-		return { id, info: this.providerModels[id] }
+		const defaultInfo = this.providerModels[id]
+		const customInfo = this.getCustomModelInfo()
+		const info = mergeModelInfo(defaultInfo, customInfo)
+
+		return { id, info }
 	}
 }

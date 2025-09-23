@@ -16,4 +16,8 @@ export class FireworksHandler extends BaseOpenAiCompatibleProvider<FireworksMode
 			defaultTemperature: 0.5,
 		})
 	}
+
+	protected getCustomModelInfo() {
+		return this.options.fireworksCustomModelInfo
+	}
 }

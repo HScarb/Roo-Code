@@ -30,6 +30,10 @@ export class GroqHandler extends BaseOpenAiCompatibleProvider<GroqModelId> {
 		})
 	}
 
+	protected getCustomModelInfo() {
+		return this.options.groqCustomModelInfo
+	}
+
 	override async *createMessage(
 		systemPrompt: string,
 		messages: Anthropic.Messages.MessageParam[],

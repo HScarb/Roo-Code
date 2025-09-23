@@ -16,4 +16,8 @@ export class SambaNovaHandler extends BaseOpenAiCompatibleProvider<SambaNovaMode
 			defaultTemperature: 0.7,
 		})
 	}
+
+	protected getCustomModelInfo() {
+		return this.options.sambaNovaCustomModelInfo
+	}
 }

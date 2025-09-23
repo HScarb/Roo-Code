@@ -120,3 +120,5 @@ export const anthropicModels = {
 } as const satisfies Record<string, ModelInfo>
 
 export const ANTHROPIC_DEFAULT_MAX_TOKENS = 8192
+
+export const anthropicAiModelInfoSaneDefaults: ModelInfo = anthropicModels[anthropicDefaultModelId]

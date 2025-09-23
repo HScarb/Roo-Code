@@ -13,6 +13,7 @@ import { DEFAULT_HEADERS } from "./constants"
 import { BaseProvider } from "./base-provider"
 import type { SingleCompletionHandler, ApiHandlerCreateMessageMetadata } from "../index"
 import { handleOpenAIError } from "./utils/openai-error-handler"
+import { mergeModelInfo } from "./utils/modelInfo"
 
 const XAI_DEFAULT_TEMPERATURE = 0
 
@@ -40,7 +41,12 @@ export class XAIHandler extends BaseProvider implements SingleCompletionHandler 
 				? (this.options.apiModelId as XAIModelId)
 				: xaiDefaultModelId
 
-		const info = xaiModels[id]
+		const defaultInfo = xaiModels[id]
+
+		// Merge with custom model info from settings
+		const customInfo = this.options.xaiCustomModelInfo
+		const info = mergeModelInfo(defaultInfo, customInfo)
+
 		const params = getModelParams({ format: "openai", modelId: id, model: info, settings: this.options })
 		return { id, info, ...params }
 	}
