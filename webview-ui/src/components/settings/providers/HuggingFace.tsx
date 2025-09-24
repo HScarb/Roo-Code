@@ -3,6 +3,7 @@ import { useEvent } from "react-use"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
 import type { ProviderSettings } from "@roo-code/types"
+import { HUGGINGFACE_DEFAULT_CONTEXT_WINDOW } from "@roo-code/types"
 
 import { ExtensionMessage } from "@roo/ExtensionMessage"
 import { vscode } from "@src/utils/vscode"
@@ -269,6 +270,46 @@ export const HuggingFace = ({ apiConfiguration, setApiConfigurationField }: Hugg
 					)}
 				</div>
 			)}
+			<div>
+				<VSCodeTextField
+					value={
+						apiConfiguration?.CustomModelInfo?.contextWindow?.toString() ||
+						HUGGINGFACE_DEFAULT_CONTEXT_WINDOW?.toString() ||
+						""
+					}
+					type="text"
+					style={{
+						borderColor: (() => {
+							const value = apiConfiguration?.CustomModelInfo?.contextWindow
+
+							if (!value) {
+								return "var(--vscode-input-border)"
+							}
+
+							return value > 0 ? "var(--vscode-charts-green)" : "var(--vscode-errorForeground)"
+						})(),
+					}}
+					onInput={handleInputChange("CustomModelInfo", (e) => {
+						const value = (e.target as HTMLInputElement).value
+						const parsed = parseInt(value)
+
+						return {
+							...(apiConfiguration?.CustomModelInfo || {
+								contextWindow: HUGGINGFACE_DEFAULT_CONTEXT_WINDOW,
+							}),
+							contextWindow: isNaN(parsed) ? HUGGINGFACE_DEFAULT_CONTEXT_WINDOW : parsed,
+						}
+					})}
+					placeholder={t("settings:placeholders.numbers.contextWindow")}
+					className="w-full">
+					<label className="block font-medium mb-1">
+						{t("settings:providers.customModel.contextWindow.label")}
+					</label>
+				</VSCodeTextField>
+				<div className="text-sm text-vscode-descriptionForeground">
+					{t("settings:providers.customModel.contextWindow.description")}
+				</div>
+			</div>
 		</>
 	)
 }

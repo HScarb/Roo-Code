@@ -1,7 +1,12 @@
 import { useCallback } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, type OrganizationAllowList, glamaDefaultModelId } from "@roo-code/types"
+import {
+	type ProviderSettings,
+	type OrganizationAllowList,
+	glamaDefaultModelId,
+	glamaDefaultModelInfo,
+} from "@roo-code/types"
 
 import type { RouterModels } from "@roo/api"
 
@@ -11,6 +16,7 @@ import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"
 import { ModelPicker } from "../ModelPicker"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type GlamaProps = {
 	apiConfiguration: ProviderSettings
@@ -70,6 +76,16 @@ export const Glama = ({
 				serviceUrl="https://glama.ai/models"
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}
+			/>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={glamaDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
 			/>
 		</>
 	)

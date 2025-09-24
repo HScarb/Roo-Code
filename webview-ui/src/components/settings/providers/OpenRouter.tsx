@@ -3,7 +3,12 @@ import { Trans } from "react-i18next"
 import { Checkbox } from "vscrui"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, type OrganizationAllowList, openRouterDefaultModelId } from "@roo-code/types"
+import {
+	type ProviderSettings,
+	type OrganizationAllowList,
+	openRouterDefaultModelId,
+	openRouterDefaultModelInfo,
+} from "@roo-code/types"
 
 import type { RouterModels } from "@roo/api"
 
@@ -15,6 +20,7 @@ import { inputEventTransform, noTransform } from "../transforms"
 
 import { ModelPicker } from "../ModelPicker"
 import { OpenRouterBalanceDisplay } from "./OpenRouterBalanceDisplay"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type OpenRouterProps = {
 	apiConfiguration: ProviderSettings
@@ -123,6 +129,16 @@ export const OpenRouter = ({
 				serviceUrl="https://openrouter.ai/models"
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}
+			/>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={openRouterDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
 			/>
 		</>
 	)

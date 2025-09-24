@@ -3,11 +3,12 @@ import { Checkbox } from "vscrui"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
 import type { ProviderSettings } from "@roo-code/types"
-
+import { openAiModelInfoSaneDefaults } from "@roo-code/types"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type OpenAIProps = {
 	apiConfiguration: ProviderSettings
@@ -72,6 +73,16 @@ export const OpenAI = ({ apiConfiguration, setApiConfigurationField }: OpenAIPro
 					{t("settings:providers.getOpenAiApiKey")}
 				</VSCodeButtonLink>
 			)}
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={openAiModelInfoSaneDefaults}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

@@ -88,3 +88,5 @@ export const sambaNovaModels = {
 		description: "Alibaba Qwen 3 32B model with 8K context window.",
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const sambaNovaDefaultModelInfo: ModelInfo = sambaNovaModels[sambaNovaDefaultModelId]

@@ -336,6 +336,7 @@ const ApiOptions = ({
 					config.default,
 				)
 			}
+			setApiConfigurationField("CustomModelInfo", undefined)
 		},
 		[setApiConfigurationField, apiConfiguration],
 	)
@@ -583,7 +584,12 @@ const ApiOptions = ({
 							value={selectedModelId === "custom-arn" ? "custom-arn" : selectedModelId}
 							onValueChange={(value) => {
 								setApiConfigurationField("apiModelId", value)
-
+								if (selectedProvider === "openai") {
+									setApiConfigurationField("openAiCustomModelInfo", undefined)
+								} else {
+									// 其他所有提供商都使用 CustomModelInfo
+									setApiConfigurationField("CustomModelInfo", undefined)
+								}
 								// Clear custom ARN if not using custom ARN option.
 								if (value !== "custom-arn" && selectedProvider === "bedrock") {
 									setApiConfigurationField("awsCustomArn", "")

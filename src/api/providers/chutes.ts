@@ -1,7 +1,7 @@
 import { DEEP_SEEK_DEFAULT_TEMPERATURE, type ChutesModelId, chutesDefaultModelId, chutesModels } from "@roo-code/types"
 import { Anthropic } from "@anthropic-ai/sdk"
 import OpenAI from "openai"
-
+import { type ModelInfo } from "@roo-code/types"
 import type { ApiHandlerOptions } from "../../shared/api"
 import { XmlMatcher } from "../../utils/xml-matcher"
 import { convertToR1Format } from "../transform/r1-format"
@@ -92,10 +92,17 @@ export class ChutesHandler extends BaseOpenAiCompatibleProvider<ChutesModelId> {
 	override getModel() {
 		const model = super.getModel()
 		const isDeepSeekR1 = model.id.includes("DeepSeek-R1")
+		const staticInfo = model.info
+		const updateinfo: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 		return {
 			...model,
 			info: {
-				...model.info,
+				...updateinfo,
 				temperature: isDeepSeekR1 ? DEEP_SEEK_DEFAULT_TEMPERATURE : this.defaultTemperature,
 			},
 		}

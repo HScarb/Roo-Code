@@ -64,8 +64,14 @@ export class DoubaoHandler extends OpenAiHandler {
 	override getModel() {
 		const id = this.options.apiModelId ?? doubaoDefaultModelId
 		const info = doubaoModels[id as keyof typeof doubaoModels] || doubaoModels[doubaoDefaultModelId]
+		const updateInfo = this.options.CustomModelInfo
+			? {
+					...info,
+					...this.options.CustomModelInfo,
+				}
+			: info
 		const params = getModelParams({ format: "openai", modelId: id, model: info, settings: this.options })
-		return { id, info, ...params }
+		return { id, info: updateInfo, ...params }
 	}
 
 	// Override to handle Doubao's usage metrics, including caching.

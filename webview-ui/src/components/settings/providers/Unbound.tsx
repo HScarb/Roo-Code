@@ -2,7 +2,12 @@ import { useCallback, useState, useRef } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { useQueryClient } from "@tanstack/react-query"
 
-import { type ProviderSettings, type OrganizationAllowList, unboundDefaultModelId } from "@roo-code/types"
+import {
+	type ProviderSettings,
+	type OrganizationAllowList,
+	unboundDefaultModelId,
+	unboundDefaultModelInfo,
+} from "@roo-code/types"
 
 import type { RouterModels } from "@roo/api"
 
@@ -13,6 +18,7 @@ import { Button } from "@src/components/ui"
 
 import { inputEventTransform } from "../transforms"
 import { ModelPicker } from "../ModelPicker"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type UnboundProps = {
 	apiConfiguration: ProviderSettings
@@ -179,6 +185,16 @@ export const Unbound = ({
 				setApiConfigurationField={setApiConfigurationField}
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}
+			/>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={unboundDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
 			/>
 		</>
 	)

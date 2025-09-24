@@ -2,12 +2,13 @@ import { useCallback, useState, useEffect } from "react"
 import { Checkbox } from "vscrui"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, type ModelInfo, BEDROCK_REGIONS } from "@roo-code/types"
+import { type ProviderSettings, type ModelInfo, BEDROCK_REGIONS, bedrockModelInfoSaneDefaults } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, StandardTooltip } from "@src/components/ui"
 
 import { inputEventTransform, noTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type BedrockProps = {
 	apiConfiguration: ProviderSettings
@@ -184,6 +185,16 @@ export const Bedrock = ({ apiConfiguration, setApiConfigurationField, selectedMo
 					</div>
 				</>
 			)}
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={bedrockModelInfoSaneDefaults}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

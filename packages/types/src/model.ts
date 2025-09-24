@@ -73,3 +73,7 @@ export const modelInfoSchema = z.object({
 })
 
 export type ModelInfo = z.infer<typeof modelInfoSchema>
+
+export const modelContextSchema = z.object({
+	contextWindow: z.number(),
+})

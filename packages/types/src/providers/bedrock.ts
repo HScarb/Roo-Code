@@ -368,6 +368,7 @@ export const bedrockModels = {
 		description: "Amazon Titan Text Embeddings V2",
 	},
 } as const satisfies Record<string, ModelInfo>
+export const bedrockModelInfoSaneDefaults = bedrockModels[bedrockDefaultModelId]
 
 export const BEDROCK_DEFAULT_TEMPERATURE = 0.3
 

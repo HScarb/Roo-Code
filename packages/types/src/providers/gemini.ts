@@ -296,3 +296,5 @@ export const geminiModels = {
 		maxThinkingTokens: 24_576,
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const geminiDefaultModelInfo: ModelInfo = geminiModels[geminiDefaultModelId]

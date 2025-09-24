@@ -20,3 +20,5 @@ export const moonshotModels = {
 } as const satisfies Record<string, ModelInfo>
 
 export const MOONSHOT_DEFAULT_TEMPERATURE = 0.6
+
+export const moonshotDefaultModelInfo: ModelInfo = moonshotModels[moonshotDefaultModelId]

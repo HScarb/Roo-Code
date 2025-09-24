@@ -103,3 +103,4 @@ export const mainlandZAiModels = {
 } as const satisfies Record<string, ModelInfo>
 
 export const ZAI_DEFAULT_TEMPERATURE = 0
+export const zaiDefaultModelInfo: ModelInfo = internationalZAiModels[internationalZAiDefaultModelId]

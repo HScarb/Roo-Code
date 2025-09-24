@@ -4,7 +4,7 @@ import type { ApiHandlerOptions } from "../../shared/api"
 
 import type { ApiStreamUsageChunk } from "../transform/stream"
 import { getModelParams } from "../transform/model-params"
-
+import { type ModelInfo } from "@roo-code/types"
 import { OpenAiHandler } from "./openai"
 
 export class DeepSeekHandler extends OpenAiHandler {
@@ -21,7 +21,13 @@ export class DeepSeekHandler extends OpenAiHandler {
 
 	override getModel() {
 		const id = this.options.apiModelId ?? deepSeekDefaultModelId
-		const info = deepSeekModels[id as keyof typeof deepSeekModels] || deepSeekModels[deepSeekDefaultModelId]
+		const staticInfo = deepSeekModels[id as keyof typeof deepSeekModels] || deepSeekModels[deepSeekDefaultModelId]
+		const info: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 		const params = getModelParams({ format: "openai", modelId: id, model: info, settings: this.options })
 		return { id, info, ...params }
 	}

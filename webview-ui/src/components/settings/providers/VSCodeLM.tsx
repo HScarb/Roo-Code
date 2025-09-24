@@ -2,7 +2,7 @@ import { useState, useCallback } from "react"
 import { useEvent } from "react-use"
 import { LanguageModelChatSelector } from "vscode"
 
-import type { ProviderSettings } from "@roo-code/types"
+import { type ProviderSettings, vscodeLlmDefaultModelInfo } from "@roo-code/types"
 
 import { ExtensionMessage } from "@roo/ExtensionMessage"
 
@@ -10,6 +10,7 @@ import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@src/components/ui"
 
 import { inputEventTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type VSCodeLMProps = {
 	apiConfiguration: ProviderSettings
@@ -82,6 +83,16 @@ export const VSCodeLM = ({ apiConfiguration, setApiConfigurationField }: VSCodeL
 				)}
 			</div>
 			<div className="text-sm text-vscode-errorForeground">{t("settings:providers.vscodeLmWarning")}</div>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={vscodeLlmDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

@@ -82,3 +82,4 @@ export const xaiModels = {
 		description: "xAI's Grok-2 Vision model (version 1212) with image support and 32K context window",
 	},
 } as const satisfies Record<string, ModelInfo>
+export const xaiDefaultModelInfo: ModelInfo = xaiModels[xaiDefaultModelId]

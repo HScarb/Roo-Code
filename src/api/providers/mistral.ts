@@ -75,8 +75,13 @@ export class MistralHandler extends BaseProvider implements SingleCompletionHand
 
 	override getModel() {
 		const id = this.options.apiModelId ?? mistralDefaultModelId
-		const info = mistralModels[id as MistralModelId] ?? mistralModels[mistralDefaultModelId]
-
+		const staticInfo = mistralModels[id as MistralModelId] ?? mistralModels[mistralDefaultModelId]
+		const info = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 		// @TODO: Move this to the `getModelParams` function.
 		const maxTokens = this.options.includeMaxTokens ? info.maxTokens : undefined
 		const temperature = this.options.modelTemperature ?? MISTRAL_DEFAULT_TEMPERATURE

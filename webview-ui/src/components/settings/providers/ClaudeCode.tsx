@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
-import { type ProviderSettings } from "@roo-code/types"
+import { type ProviderSettings, claudeCodeModelInfoSaneDefaults } from "@roo-code/types"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Slider } from "@src/components/ui"
+import { inputEventTransform } from "../transforms"
 
 interface ClaudeCodeProps {
 	apiConfiguration: ProviderSettings
@@ -16,6 +17,16 @@ export const ClaudeCode: React.FC<ClaudeCodeProps> = ({ apiConfiguration, setApi
 		const element = e.target as HTMLInputElement
 		setApiConfigurationField("claudeCodePath", element.value)
 	}
+	const handleCustomInputChange = useCallback(
+		<K extends keyof ProviderSettings, E>(
+			field: K,
+			transform: (event: E) => ProviderSettings[K] = inputEventTransform,
+		) =>
+			(event: E | Event) => {
+				setApiConfigurationField(field, transform(event as E))
+			},
+		[setApiConfigurationField],
+	)
 
 	const maxOutputTokens = apiConfiguration?.claudeCodeMaxOutputTokens || 8000
 
@@ -56,6 +67,44 @@ export const ClaudeCode: React.FC<ClaudeCodeProps> = ({ apiConfiguration, setApi
 				<p className="text-sm text-vscode-descriptionForeground mt-1">
 					{t("settings:providers.claudeCode.maxTokensDescription")}
 				</p>
+			</div>
+			<div>
+				<VSCodeTextField
+					value={
+						apiConfiguration?.CustomModelInfo?.contextWindow?.toString() ||
+						claudeCodeModelInfoSaneDefaults.contextWindow?.toString() ||
+						""
+					}
+					type="text"
+					style={{
+						borderColor: (() => {
+							const value = apiConfiguration?.CustomModelInfo?.contextWindow
+
+							if (!value) {
+								return "var(--vscode-input-border)"
+							}
+
+							return value > 0 ? "var(--vscode-charts-green)" : "var(--vscode-errorForeground)"
+						})(),
+					}}
+					onInput={handleCustomInputChange("CustomModelInfo", (e) => {
+						const value = (e.target as HTMLInputElement).value
+						const parsed = parseInt(value)
+
+						return {
+							...(apiConfiguration?.CustomModelInfo || claudeCodeModelInfoSaneDefaults),
+							contextWindow: isNaN(parsed) ? claudeCodeModelInfoSaneDefaults.contextWindow : parsed,
+						}
+					})}
+					placeholder={t("settings:placeholders.numbers.contextWindow")}
+					className="w-full">
+					<label className="block font-medium mb-1">
+						{t("settings:providers.customModel.contextWindow.label")}
+					</label>
+				</VSCodeTextField>
+				<div className="text-sm text-vscode-descriptionForeground">
+					{t("settings:providers.customModel.contextWindow.description")}
+				</div>
 			</div>
 		</div>
 	)

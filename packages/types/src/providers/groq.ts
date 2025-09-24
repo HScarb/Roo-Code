@@ -120,3 +120,5 @@ export const groqModels = {
 			"GPT-OSS 20B is OpenAI's flagship open source model, built on a Mixture-of-Experts (MoE) architecture with 20 billion parameters and 32 experts.",
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const groqDefaultModelInfo: ModelInfo = groqModels[groqDefaultModelId]

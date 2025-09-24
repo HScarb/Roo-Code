@@ -81,3 +81,5 @@ export const mistralModels = {
 } as const satisfies Record<string, ModelInfo>
 
 export const MISTRAL_DEFAULT_TEMPERATURE = 0
+
+export const mistralDefaultModelInfo: ModelInfo = mistralModels[mistralDefaultModelId]

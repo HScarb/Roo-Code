@@ -89,3 +89,5 @@ export const claudeCodeModels = {
 		requiredReasoningBudget: false,
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const claudeCodeModelInfoSaneDefaults: ModelInfo = claudeCodeModels[claudeCodeDefaultModelId]

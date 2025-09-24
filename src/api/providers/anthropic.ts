@@ -236,7 +236,13 @@ export class AnthropicHandler extends BaseProvider implements SingleCompletionHa
 	getModel() {
 		const modelId = this.options.apiModelId
 		let id = modelId && modelId in anthropicModels ? (modelId as AnthropicModelId) : anthropicDefaultModelId
-		const info: ModelInfo = anthropicModels[id]
+		const staticInfo: ModelInfo = anthropicModels[id]
+		const info: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 
 		const params = getModelParams({
 			format: "anthropic",

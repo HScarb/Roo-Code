@@ -1,13 +1,13 @@
 import { useCallback } from "react"
 import { VSCodeTextField, VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
 
-import type { ProviderSettings } from "@roo-code/types"
-
+import { type ProviderSettings, zaiDefaultModelInfo } from "@roo-code/types"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"
 import { cn } from "@/lib/utils"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type ZAiProps = {
 	apiConfiguration: ProviderSettings
@@ -71,6 +71,16 @@ export const ZAi = ({ apiConfiguration, setApiConfigurationField }: ZAiProps) =>
 					</VSCodeButtonLink>
 				)}
 			</div>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={zaiDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

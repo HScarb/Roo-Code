@@ -330,3 +330,5 @@ export const VERTEX_REGIONS = [
 	{ value: "me-central1", label: "me-central1" },
 	{ value: "africa-south1", label: "africa-south1" },
 ]
+
+export const vertexAiModelInfoSaneDefaults: ModelInfo = vertexModels[vertexDefaultModelId]

@@ -259,3 +259,5 @@ export const chutesModels = {
 			"GLM-4.5-FP8 model with 128k token context window, optimized for agent-based applications with MoE architecture.",
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const chutesAiModelInfoSaneDefaults: ModelInfo = chutesModels[chutesDefaultModelId]

@@ -2,7 +2,7 @@ import { ioIntelligenceDefaultModelId, ioIntelligenceModels, type IOIntelligence
 
 import type { ApiHandlerOptions } from "../../shared/api"
 import { BaseOpenAiCompatibleProvider } from "./base-openai-compatible-provider"
-
+import { type ModelInfo } from "@roo-code/types"
 export class IOIntelligenceHandler extends BaseOpenAiCompatibleProvider<IOIntelligenceModelId> {
 	constructor(options: ApiHandlerOptions) {
 		if (!options.ioIntelligenceApiKey) {
@@ -27,16 +27,23 @@ export class IOIntelligenceHandler extends BaseOpenAiCompatibleProvider<IOIntell
 		if (modelInfo) {
 			return { id: modelId as IOIntelligenceModelId, info: modelInfo }
 		}
+		const staticInfo = {
+			maxTokens: 8192,
+			contextWindow: 128000,
+			supportsImages: false,
+			supportsPromptCache: false,
+		}
+		const info: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 
 		// Return the requested model ID even if not found, with fallback info
 		return {
 			id: modelId as IOIntelligenceModelId,
-			info: {
-				maxTokens: 8192,
-				contextWindow: 128000,
-				supportsImages: false,
-				supportsPromptCache: false,
-			},
+			info: info,
 		}
 	}
 }

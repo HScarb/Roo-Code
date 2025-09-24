@@ -42,3 +42,4 @@ export const ioIntelligenceModels = {
 		description: "OpenAI GPT-OSS 120B model",
 	},
 } as const satisfies Record<string, ModelInfo>
+export const ioIntelligenceDefaultModelInfo = ioIntelligenceModels[ioIntelligenceDefaultModelId]

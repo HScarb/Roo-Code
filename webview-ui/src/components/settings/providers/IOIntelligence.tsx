@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
 import type { ProviderSettings, OrganizationAllowList } from "@roo-code/types"
-import { ioIntelligenceDefaultModelId, ioIntelligenceModels } from "@roo-code/types"
+import { ioIntelligenceDefaultModelId, ioIntelligenceModels, ioIntelligenceDefaultModelInfo } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
@@ -10,6 +10,7 @@ import { useExtensionState } from "@src/context/ExtensionStateContext"
 import { ModelPicker } from "../ModelPicker"
 
 import { inputEventTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type IOIntelligenceProps = {
 	apiConfiguration: ProviderSettings
@@ -66,6 +67,16 @@ export const IOIntelligence = ({
 				setApiConfigurationField={setApiConfigurationField}
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}
+			/>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={ioIntelligenceDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
 			/>
 		</>
 	)

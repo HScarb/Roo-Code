@@ -1,12 +1,12 @@
 import { useCallback } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import type { ProviderSettings } from "@roo-code/types"
-
+import { type ProviderSettings, cerebrasAiModelInfoSaneDefaults } from "@roo-code/types"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type CerebrasProps = {
 	apiConfiguration: ProviderSettings
@@ -45,6 +45,16 @@ export const Cerebras = ({ apiConfiguration, setApiConfigurationField }: Cerebra
 					{t("settings:providers.getCerebrasApiKey")}
 				</VSCodeButtonLink>
 			)}
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={cerebrasAiModelInfoSaneDefaults}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

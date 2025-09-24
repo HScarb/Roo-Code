@@ -74,3 +74,5 @@ export const cerebrasModels = {
 			"OpenAI GPT OSS model with ~2800 tokens/s\n\n• 64K context window\n• Excels at efficient reasoning across science, math, and coding",
 	},
 } as const satisfies Record<string, ModelInfo>
+
+export const cerebrasAiModelInfoSaneDefaults: ModelInfo = cerebrasModels[cerebrasDefaultModelId]

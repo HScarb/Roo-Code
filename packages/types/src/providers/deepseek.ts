@@ -31,3 +31,5 @@ export const deepSeekModels = {
 } as const satisfies Record<string, ModelInfo>
 
 export const DEEP_SEEK_DEFAULT_TEMPERATURE = 0.6
+
+export const deepseekDefaultModelInfo: ModelInfo = deepSeekModels[deepSeekDefaultModelId]

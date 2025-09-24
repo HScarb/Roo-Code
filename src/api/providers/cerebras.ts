@@ -1,7 +1,7 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 
 import { type CerebrasModelId, cerebrasDefaultModelId, cerebrasModels } from "@roo-code/types"
-
+import { type ModelInfo } from "@roo-code/types"
 import type { ApiHandlerOptions } from "../../shared/api"
 import { calculateApiCostOpenAI } from "../../shared/cost"
 import { ApiStream } from "../transform/stream"

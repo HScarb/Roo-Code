@@ -1,7 +1,12 @@
 import { useCallback, useState, useEffect, useRef } from "react"
 import { VSCodeTextField, VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, type OrganizationAllowList, litellmDefaultModelId } from "@roo-code/types"
+import {
+	type ProviderSettings,
+	type OrganizationAllowList,
+	litellmDefaultModelId,
+	litellmDefaultModelInfo,
+} from "@roo-code/types"
 
 import { RouterName } from "@roo/api"
 import { ExtensionMessage } from "@roo/ExtensionMessage"
@@ -13,6 +18,7 @@ import { Button } from "@src/components/ui"
 
 import { inputEventTransform } from "../transforms"
 import { ModelPicker } from "../ModelPicker"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type LiteLLMProps = {
 	apiConfiguration: ProviderSettings
@@ -174,6 +180,16 @@ export const LiteLLM = ({
 				}
 				return null
 			})()}
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={litellmDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

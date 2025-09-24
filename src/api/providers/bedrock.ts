@@ -913,7 +913,9 @@ export class AwsBedrockHandler extends BaseProvider implements SingleCompletionH
 		if (this.options.awsModelContextWindow && this.options.awsModelContextWindow > 0) {
 			model.info.contextWindow = this.options.awsModelContextWindow
 		}
-
+		if (this.options.CustomModelInfo && this.options.CustomModelInfo.contextWindow > 0) {
+			model.info.contextWindow = this.options.CustomModelInfo.contextWindow
+		}
 		return model
 	}
 

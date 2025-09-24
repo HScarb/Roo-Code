@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { reasoningEffortsSchema, verbosityLevelsSchema, modelInfoSchema } from "./model.js"
+import { reasoningEffortsSchema, verbosityLevelsSchema, modelInfoSchema, modelContextSchema } from "./model.js"
 import { codebaseIndexProviderSchema } from "./codebase-index.js"
 
 // Extended schema that includes "minimal" for GPT-5 models
@@ -88,6 +88,9 @@ const baseProviderSettingsSchema = z.object({
 
 	// Model verbosity.
 	verbosity: verbosityLevelsSchema.optional(),
+
+	// User Custom Model Info
+	CustomModelInfo: modelContextSchema.nullish(),
 })
 
 // Several of the providers share common model config properties.

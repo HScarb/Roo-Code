@@ -516,8 +516,14 @@ export class VsCodeLmHandler extends BaseProvider implements SingleCompletionHan
 				outputPrice: 0,
 				description: `VSCode Language Model: ${modelId}`,
 			}
-
-			return { id: modelId, info: modelInfo }
+			// Merge custom model info if provided
+			const info: ModelInfo = this.options.CustomModelInfo
+				? {
+						...modelInfo,
+						...this.options.CustomModelInfo,
+					}
+				: modelInfo
+			return { id: modelId, info: info }
 		}
 
 		// Fallback when no client is available

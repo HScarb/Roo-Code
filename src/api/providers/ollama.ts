@@ -83,9 +83,16 @@ export class OllamaHandler extends BaseProvider implements SingleCompletionHandl
 	}
 
 	override getModel(): { id: string; info: ModelInfo } {
+		const staticInfo: ModelInfo = openAiModelInfoSaneDefaults
+		const info: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
 		return {
 			id: this.options.ollamaModelId || "",
-			info: openAiModelInfoSaneDefaults,
+			info: info,
 		}
 	}
 

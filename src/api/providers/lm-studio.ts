@@ -134,14 +134,29 @@ export class LmStudioHandler extends BaseProvider implements SingleCompletionHan
 	override getModel(): { id: string; info: ModelInfo } {
 		const models = getModelsFromCache("lmstudio")
 		if (models && this.options.lmStudioModelId && models[this.options.lmStudioModelId]) {
+			const staticInfo: ModelInfo = models[this.options.lmStudioModelId]
+			const info: ModelInfo = this.options.CustomModelInfo
+				? {
+						...staticInfo,
+						...this.options.CustomModelInfo,
+					}
+				: staticInfo
+
 			return {
 				id: this.options.lmStudioModelId,
-				info: models[this.options.lmStudioModelId],
+				info: info,
 			}
 		} else {
+			const info: ModelInfo = this.options.CustomModelInfo
+				? {
+						...openAiModelInfoSaneDefaults,
+						...this.options.CustomModelInfo,
+					}
+				: openAiModelInfoSaneDefaults
+
 			return {
 				id: this.options.lmStudioModelId || "",
-				info: openAiModelInfoSaneDefaults,
+				info: info,
 			}
 		}
 	}

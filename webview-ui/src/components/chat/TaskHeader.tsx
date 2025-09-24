@@ -52,7 +52,7 @@ const TaskHeader = ({
 
 	const textContainerRef = useRef<HTMLDivElement>(null)
 	const textRef = useRef<HTMLDivElement>(null)
-	const contextWindow = model?.contextWindow || 1
+	const contextWindow = apiConfiguration?.CustomModelInfo?.contextWindow || model?.contextWindow || 1
 
 	const condenseButton = (
 		<StandardTooltip content={t("chat:task.condenseContext")}>

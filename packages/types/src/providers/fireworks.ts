@@ -103,3 +103,4 @@ export const fireworksModels = {
 			"OpenAI gpt-oss-120b: Production-grade, general-purpose model that fits on a single H100 GPU. Features complex reasoning, configurable effort, full chain-of-thought transparency, and supports function calling, tool use, and structured outputs.",
 	},
 } as const satisfies Record<string, ModelInfo>
+export const fireworksDefaultModelInfo: ModelInfo = fireworksModels[fireworksDefaultModelId]

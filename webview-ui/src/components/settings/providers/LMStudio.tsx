@@ -5,7 +5,7 @@ import { Checkbox } from "vscrui"
 import { VSCodeLink, VSCodeRadio, VSCodeRadioGroup, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
 import type { ProviderSettings } from "@roo-code/types"
-
+import { lMStudioDefaultModelInfo } from "@roo-code/types"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { ExtensionMessage } from "@roo/ExtensionMessage"
 import { useRouterModels } from "@src/components/ui/hooks/useRouterModels"
@@ -13,6 +13,7 @@ import { vscode } from "@src/utils/vscode"
 
 import { inputEventTransform } from "../transforms"
 import { ModelRecord } from "@roo/api"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type LMStudioProps = {
 	apiConfiguration: ProviderSettings
@@ -221,6 +222,16 @@ export const LMStudio = ({ apiConfiguration, setApiConfigurationField }: LMStudi
 					}}
 				/>
 			</div>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={lMStudioDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }

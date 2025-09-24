@@ -159,3 +159,4 @@ export const vscodeLlmModels = {
 		maxInputTokens: number
 	}
 >
+export const vscodeLlmDefaultModelInfo: ModelInfo = vscodeLlmModels[vscodeLlmDefaultModelId]

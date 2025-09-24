@@ -1,7 +1,12 @@
 import { useCallback, useState } from "react"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, type OrganizationAllowList, requestyDefaultModelId } from "@roo-code/types"
+import {
+	type ProviderSettings,
+	type OrganizationAllowList,
+	requestyDefaultModelId,
+	requestyDefaultModelInfo,
+} from "@roo-code/types"
 
 import type { RouterModels } from "@roo/api"
 
@@ -13,6 +18,7 @@ import { Button } from "@src/components/ui"
 import { inputEventTransform } from "../transforms"
 import { ModelPicker } from "../ModelPicker"
 import { RequestyBalanceDisplay } from "./RequestyBalanceDisplay"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type RequestyProps = {
 	apiConfiguration: ProviderSettings
@@ -99,6 +105,16 @@ export const Requesty = ({
 				serviceUrl="https://requesty.ai"
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}
+			/>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={requestyDefaultModelInfo}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
 			/>
 		</>
 	)

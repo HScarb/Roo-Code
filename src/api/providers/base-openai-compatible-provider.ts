@@ -129,7 +129,13 @@ export abstract class BaseOpenAiCompatibleProvider<ModelName extends string>
 			this.options.apiModelId && this.options.apiModelId in this.providerModels
 				? (this.options.apiModelId as ModelName)
 				: this.defaultProviderModelId
-
-		return { id, info: this.providerModels[id] }
+		const staticInfo: ModelInfo = this.providerModels[id]
+		const info: ModelInfo = this.options.CustomModelInfo
+			? {
+					...staticInfo,
+					...this.options.CustomModelInfo,
+				}
+			: staticInfo
+		return { id, info: info }
 	}
 }

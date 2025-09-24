@@ -1,12 +1,13 @@
 import { useCallback } from "react"
 import { VSCodeLink, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import { type ProviderSettings, VERTEX_REGIONS } from "@roo-code/types"
+import { type ProviderSettings, VERTEX_REGIONS, vertexAiModelInfoSaneDefaults } from "@roo-code/types"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@src/components/ui"
 
 import { inputEventTransform } from "../transforms"
+import { ContextWindowInput } from "../../common/ContextWindow"
 
 type VertexProps = {
 	apiConfiguration: ProviderSettings
@@ -91,6 +92,16 @@ export const Vertex = ({ apiConfiguration, setApiConfigurationField }: VertexPro
 					</SelectContent>
 				</Select>
 			</div>
+			<ContextWindowInput
+				modelInfo={apiConfiguration?.CustomModelInfo || undefined}
+				defaultModelInfo={vertexAiModelInfoSaneDefaults}
+				onUpdate={(updatedInfo) => {
+					setApiConfigurationField("CustomModelInfo", updatedInfo)
+				}}
+				label={t("settings:providers.customModel.contextWindow.label")}
+				description={t("settings:providers.customModel.contextWindow.description")}
+				placeholder={t("settings:placeholders.numbers.contextWindow")}
+			/>
 		</>
 	)
 }
